@@ -248,7 +248,7 @@
             </div>
 
             <!-- Background Music -->
-            <audio id="bgMusic" controls loop>
+            <audio id="bgMusic" preload="auto">
                 <source src="kesariya.mp3" type="audio/mpeg">
             </audio>
 
@@ -298,30 +298,29 @@
         const endTime = 110;   // ⏱️ 110 sec (1 min 50 sec) par repeat hoga
 
         function checkPassword() {
-            let input = document.getElementById("passInput").value.toLowerCase().trim();
-            if(input === "vibha") {
-                document.getElementById("login-screen").style.display = "none";
-                document.getElementById("main-screen").style.display = "block";
-                
-                let audio = document.getElementById("bgMusic");
-                
-                // Song fixed 10th sec se play hoga
-                audio.currentTime = startTime;
-                audio.play().catch(() => console.log("Audio autoplay restricted"));
+    let input = document.getElementById("passInput").value.toLowerCase().trim();
+    if(input === "vibha") {
+        document.getElementById("login-screen").style.display = "none";
+        document.getElementById("main-screen").style.display = "block";
+        
+        let audio = document.getElementById("bgMusic");
+        
+        audio.load();
+        audio.play().then(() => {
+            audio.currentTime = startTime;
+        }).catch(err => console.log("Play error:", err));
 
-                // 110th sec standard reach karte hi loop/repeat hoga
-                audio.addEventListener('timeupdate', function() {
-                    if (this.currentTime >= endTime) {
-                        this.currentTime = startTime;
-                        this.play();
-                    }
-                });
-
-            } else {
-                document.getElementById("error-msg").style.display = "block";
+        audio.addEventListener('timeupdate', function() {
+            if (this.currentTime >= endTime) {
+                this.currentTime = startTime;
+                this.play();
             }
-        }
+        });
 
+    } else {
+        document.getElementById("error-msg").style.display = "block";
+    }
+}
         // Section messages
         const data = {
             shayri1: "Tumhari ek muskaan hi kaafi hai mere din ko haseen banane ke liye... Vibha, tum meri zindagi ka sabse khoobsurat hissa ho! ❤️",
