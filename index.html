@@ -247,13 +247,12 @@
                 <div class="img-card full-width"><img src="1000074106.jpg" alt="Memory 5"></div>
             </div>
 
-            <!-- Background Music -->
-           <script>
-               <audio id="bgMusic" controls preload="auto" style="width: 100%; margin-top: 10px;">
-    <source src="kesariya.mp3" type="audio/mpeg">
-</audio>
-        // Password & Song timing logic
-        
+            <!-- Background Music Player (Controls visible hai taaki song chale) -->
+            <audio id="bgMusic" controls preload="auto">
+                <source src="kesariya.mp3" type="audio/mpeg">
+                Aapka browser audio support nahi karta.
+            </audio>
+
             <!-- Menu Sections -->
             <div class="menu-buttons" style="margin-top: 15px;">
                 <button class="section-btn" onclick="showText('shayri1')">✨ Pyar Shayari</button>
@@ -295,7 +294,7 @@
     </div>
 
     <script>
-        // Password & Song timing logic
+        // Password, Audio Timing & Autoplay Logic
         function checkPassword() {
             let input = document.getElementById("passInput").value.toLowerCase().trim();
             if(input === "vibha") {
@@ -307,19 +306,19 @@
                 // 1. Song ko 10th second par set karein
                 audio.currentTime = 10;
                 
-                // 2. Play try karein (Autoplay policy handle karne ke liye)
+                // 2. Play karne ki koshish karein
                 let playPromise = audio.play();
                 if (playPromise !== undefined) {
                     playPromise.catch(() => {
-                        console.log("Autoplay restricted. Waiting for user click.");
-                        // Agar browser ne block kiya toh screen par ek baar click hote hi bajne lagega
+                        console.log("Autoplay restricted by browser.");
+                        // Agar browser block kare toh screen par kahin bhi click karne par song bajne lagega
                         document.body.addEventListener('click', function() {
                             audio.play();
                         }, { once: true });
                     });
                 }
 
-                // 3. 110th second par wapas 10th sec par loop karein
+                // 3. 110th second par wapas 10th second par loop karayein
                 audio.addEventListener('timeupdate', function() {
                     if (this.currentTime >= 110) {
                         this.currentTime = 10;
@@ -353,3 +352,5 @@
             document.getElementById("proposalModal").style.display = "none";
         }
     </script>
+</body>
+</html>
