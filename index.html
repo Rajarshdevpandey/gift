@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Princess Vibha ❤️</title>
+    <!-- Google Fonts & FontAwesome Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            overflow-x: hidden;
+            padding: 20px;
+        }
+
+        /* 3D Glassmorphism Container */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            padding: 30px;
+            width: 100%;
+            max-width: 480px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        /* Password Screen */
+        .title-font {
+            font-family: 'Great Vibes', cursive;
+            font-size: 2.8rem;
+            color: #ff4d6d;
+            text-shadow: 0 0 10px rgba(255, 77, 109, 0.5);
+            margin-bottom: 10px;
+        }
+
+        input[type="password"] {
+            width: 85%;
+            padding: 14px 20px;
+            border-radius: 30px;
+            border: 2px solid #ff4d6d;
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff;
+            font-size: 16px;
+            text-align: center;
+            outline: none;
+            margin: 15px 0;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        input[type="password"]::placeholder {
+            color: #ddd;
+        }
+
+        .btn-3d {
+            background: linear-gradient(45deg, #ff4d6d, #ff758c);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 8px 15px rgba(255, 77, 109, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .btn-3d:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 12px 20px rgba(255, 77, 109, 0.6);
+        }
+
+        #error-msg {
+            color: #ff6b6b;
+            font-size: 14px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        /* Main Content */
+        #main-screen {
+            display: none;
+        }
+
+        /* 3D Photo Grid (Configured for 5 Photos) */
+        .memory-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .img-card {
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            transition: transform 0.4s ease;
+            height: 130px;
+        }
+
+        /* 5th photo full-width accent */
+        .img-card.full-width {
+            grid-column: span 2;
+            height: 160px;
+        }
+
+        .img-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .img-card:hover {
+            transform: scale(1.05) rotate(1deg);
+            z-index: 2;
+        }
+
+        /* Interactive Sections */
+        .menu-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .section-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            padding: 10px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: 0.3s;
+        }
+
+        .section-btn:hover {
+            background: #ff4d6d;
+            border-color: #ff4d6d;
+        }
+
+        .content-box {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 15px;
+            min-height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-style: italic;
+            border-left: 4px solid #ff4d6d;
+            margin-bottom: 20px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* Proposal Modal & Animation */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #2b1055, #7597de);
+            padding: 30px;
+            border-radius: 25px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 0 30px rgba(255, 77, 109, 0.8);
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0); }
+            100% { transform: scale(1); }
+        }
+
+        .propose-icon {
+            font-size: 60px;
+            color: #ff4d6d;
+            margin-bottom: 10px;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        audio {
+            width: 100%;
+            margin-top: 10px;
+            height: 35px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="glass-card">
+        <!-- Password Screen -->
+        <div id="login-screen">
+            <h1 class="title-font">Welcome Vibha ❤️</h1>
+            <p style="font-size: 14px; color: #ccc;">Enter password to unlock your special surprise:</p>
+            <input type="password" id="passInput" placeholder="Enter your name...">
+            <br>
+            <button class="btn-3d" onclick="checkPassword()">Unlock Magic ✨</button>
+            <p id="error-msg">Galat password! Sirf 'Vibha' naam se hi khulega 😉</p>
+        </div>
+
+        <!-- Main Screen -->
+        <div id="main-screen">
+            <h1 class="title-font">Happy Girlfriend Day Vibha 🌹</h1>
+            
+            <!-- 5 Loving Memory Photos Grid -->
+            <div class="memory-grid">
+                <div class="img-card"><img src="1000130007.png" alt="Memory 1"></div>
+                <div class="img-card"><img src="1000129967.png" alt="Memory 2"></div>
+                <div class="img-card"><img src="1000074100.jpg" alt="Memory 3"></div>
+                <div class="img-card"><img src="1000095547.jpg" alt="Memory 4"></div>
+                <!-- 5th Couple Photo Full Width Accent -->
+                <div class="img-card full-width"><img src="1000074106.jpg" alt="Memory 5"></div>
+            </div>
+
+            <!-- Background Music -->
+            <audio id="bgMusic" controls loop>
+                <source src="kesariya.mp3" type="audio/mpeg">
+            </audio>
+
+            <!-- Menu Sections -->
+            <div class="menu-buttons" style="margin-top: 15px;">
+                <button class="section-btn" onclick="showText('shayri1')">✨ Pyar Shayari</button>
+                <button class="section-btn" onclick="showText('msg1')">💌 Heart Message</button>
+                <button class="section-btn" onclick="showText('shayri2')">🌹 Dil Ki Baat</button>
+                <button class="section-btn" onclick="showText('reasons')">💖 Why Vibha?</button>
+            </div>
+
+            <div class="content-box" id="displayArea">
+                Neeche buttons par click karo cute romantic baaten padhne ke liye! 👇
+            </div>
+
+            <button class="btn-3d" onclick="openProposal()" style="width: 100%; background: linear-gradient(45deg, #ff0054, #ff5400);">
+                💍 Click Here To See Proposal!
+            </button>
+        </div>
+    </div>
+
+    <!-- Proposal Popup Window -->
+    <div class="modal" id="proposalModal">
+        <div class="modal-content">
+            <!-- Proposing Boy with Rose Icon -->
+            <div class="propose-icon">
+                🧎‍♂️🌹
+            </div>
+            <h2 class="title-font" style="font-size: 2.2rem; color: #fff;">Will You Be My Girlfriend, Vibha?</h2>
+            
+            <p style="font-size: 14px; margin: 15px 0; color: #ffe5ec;">
+                "Teri har adaa se pyara koi nahi,<br>
+                Meri is zindagi me tere siva koi nahi...<br>
+                Thamm jaati hai duniya jab tum hasti ho,<br>
+                Kya tum banogi meri humsafar hamesha ke liye?" 💖
+            </p>
+
+            <button class="btn-3d" onclick="acceptProposal()" style="font-size: 18px; padding: 10px 35px;">
+                YES! I Accept 💖
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Password logic & Music Timing Configuration
+        const startTime = 10;  // ⏱️ 10 sec par start hoga
+        const endTime = 110;   // ⏱️ 110 sec (1 min 50 sec) par repeat hoga
+
+        function checkPassword() {
+            let input = document.getElementById("passInput").value.toLowerCase().trim();
+            if(input === "vibha") {
+                document.getElementById("login-screen").style.display = "none";
+                document.getElementById("main-screen").style.display = "block";
+                
+                let audio = document.getElementById("bgMusic");
+                
+                // Song fixed 10th sec se play hoga
+                audio.currentTime = startTime;
+                audio.play().catch(() => console.log("Audio autoplay restricted"));
+
+                // 110th sec standard reach karte hi loop/repeat hoga
+                audio.addEventListener('timeupdate', function() {
+                    if (this.currentTime >= endTime) {
+                        this.currentTime = startTime;
+                        this.play();
+                    }
+                });
+
+            } else {
+                document.getElementById("error-msg").style.display = "block";
+            }
+        }
+
+        // Section messages
+        const data = {
+            shayri1: "Tumhari ek muskaan hi kaafi hai mere din ko haseen banane ke liye... Vibha, tum meri zindagi ka sabse khoobsurat hissa ho! ❤️",
+            msg1: "Jab se tum meri life me aayi ho, har ek lamha special ban gaya hai. Vibha, tum sirf meri pasand nahi, meri zarurat ho! 💌",
+            shayri2: "Aankhon me teri ek alag hi noor hai,<br>Mujhe tujhse pyaar hai, isme mera kya qasoor hai! 🌹",
+            reasons: "Kyunki tum jaisi ho, waisi hi sabse alag aur pyaari ho. Tumhari baaten aur tumhara gussa dono hi mujhe bohot pasand hain! 🥰"
+        };
+
+        function showText(key) {
+            document.getElementById("displayArea").innerHTML = data[key];
+        }
+
+        function openProposal() {
+            document.getElementById("proposalModal").style.display = "flex";
+        }
+
+        function acceptProposal() {
+            alert("Yayee! ❤️ I Love You So Much Vibha! 🎉🌹");
+            document.getElementById("proposalModal").style.display = "none";
+        }
+    </script>
+</body>
+</html>
