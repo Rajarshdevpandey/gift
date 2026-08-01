@@ -248,10 +248,12 @@
             </div>
 
             <!-- Background Music -->
-            <audio id="bgMusic" preload="auto">
+           <script>
+               <audio id="bgMusic" controls preload="auto" style="width: 100%; margin-top: 10px;">
     <source src="kesariya.mp3" type="audio/mpeg">
 </audio>
-
+        // Password & Song timing logic
+        
             <!-- Menu Sections -->
             <div class="menu-buttons" style="margin-top: 15px;">
                 <button class="section-btn" onclick="showText('shayri1')">✨ Pyar Shayari</button>
@@ -293,10 +295,7 @@
     </div>
 
     <script>
-        // Password logic & Music Timing Configuration
-        const startTime = 10;  // ⏱️ 10 sec par start hoga
-        const endTime = 110;   // ⏱️ 110 sec (1 min 50 sec) par repeat hoga
-
+        // Password & Song timing logic
         function checkPassword() {
             let input = document.getElementById("passInput").value.toLowerCase().trim();
             if(input === "vibha") {
@@ -305,14 +304,25 @@
                 
                 let audio = document.getElementById("bgMusic");
                 
-                // Song fixed 10th sec se play hoga
-                audio.currentTime = startTime;
-                audio.play().catch(() => console.log("Audio autoplay restricted"));
+                // 1. Song ko 10th second par set karein
+                audio.currentTime = 10;
+                
+                // 2. Play try karein (Autoplay policy handle karne ke liye)
+                let playPromise = audio.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(() => {
+                        console.log("Autoplay restricted. Waiting for user click.");
+                        // Agar browser ne block kiya toh screen par ek baar click hote hi bajne lagega
+                        document.body.addEventListener('click', function() {
+                            audio.play();
+                        }, { once: true });
+                    });
+                }
 
-                // 110th sec standard reach karte hi loop/repeat hoga
+                // 3. 110th second par wapas 10th sec par loop karein
                 audio.addEventListener('timeupdate', function() {
-                    if (this.currentTime >= endTime) {
-                        this.currentTime = startTime;
+                    if (this.currentTime >= 110) {
+                        this.currentTime = 10;
                         this.play();
                     }
                 });
@@ -322,7 +332,7 @@
             }
         }
 
-        // Section messages
+        // Section messages data
         const data = {
             shayri1: "Tumhari ek muskaan hi kaafi hai mere din ko haseen banane ke liye... Vibha, tum meri zindagi ka sabse khoobsurat hissa ho! ❤️",
             msg1: "Jab se tum meri life me aayi ho, har ek lamha special ban gaya hai. Vibha, tum sirf meri pasand nahi, meri zarurat ho! 💌",
@@ -343,5 +353,3 @@
             document.getElementById("proposalModal").style.display = "none";
         }
     </script>
-</body>
-</html>
