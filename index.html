@@ -99,7 +99,7 @@
             display: none;
         }
 
-        /* 3D Photo Grid (Configured for 5 Photos) */
+        /* 3D Photo Grid */
         .memory-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -116,7 +116,6 @@
             height: 130px;
         }
 
-        /* 5th photo full-width accent */
         .img-card.full-width {
             grid-column: span 2;
             height: 160px;
@@ -172,7 +171,7 @@
             line-height: 1.5;
         }
 
-        /* Proposal Modal & Animation */
+        /* Proposal Modal */
         .modal {
             display: none;
             position: fixed;
@@ -214,7 +213,7 @@
 
         audio {
             width: 100%;
-            margin-top: 10px;
+            margin: 15px 0;
             height: 35px;
             border-radius: 10px;
         }
@@ -237,23 +236,22 @@
         <div id="main-screen">
             <h1 class="title-font">Happy Girlfriend Day Vibha 🌹</h1>
             
-            <!-- 5 Loving Memory Photos Grid -->
+            <!-- 5 Memory Photos Grid -->
             <div class="memory-grid">
                 <div class="img-card"><img src="1000130007.png" alt="Memory 1"></div>
                 <div class="img-card"><img src="1000129967.png" alt="Memory 2"></div>
                 <div class="img-card"><img src="1000074100.jpg" alt="Memory 3"></div>
                 <div class="img-card"><img src="1000095547.jpg" alt="Memory 4"></div>
-                <!-- 5th Couple Photo Full Width Accent -->
                 <div class="img-card full-width"><img src="1000074106.jpg" alt="Memory 5"></div>
             </div>
 
-            <!-- Background Music -->
-            <audio id="bgMusic" preload="auto">
-                <source src="kesariya.mp3" type="audio/mpeg">
+            <!-- Audio Player -->
+            <audio id="bgMusic" controls preload="auto">
+                <source src="./kesariya.mp3" type="audio/mpeg">
             </audio>
 
             <!-- Menu Sections -->
-            <div class="menu-buttons" style="margin-top: 15px;">
+            <div class="menu-buttons">
                 <button class="section-btn" onclick="showText('shayri1')">✨ Pyar Shayari</button>
                 <button class="section-btn" onclick="showText('msg1')">💌 Heart Message</button>
                 <button class="section-btn" onclick="showText('shayri2')">🌹 Dil Ki Baat</button>
@@ -273,10 +271,7 @@
     <!-- Proposal Popup Window -->
     <div class="modal" id="proposalModal">
         <div class="modal-content">
-            <!-- Proposing Boy with Rose Icon -->
-            <div class="propose-icon">
-                🧎‍♂️🌹
-            </div>
+            <div class="propose-icon">🧎‍♂️🌹</div>
             <h2 class="title-font" style="font-size: 2.2rem; color: #fff;">Will You Be My Girlfriend, Vibha?</h2>
             
             <p style="font-size: 14px; margin: 15px 0; color: #ffe5ec;">
@@ -293,35 +288,40 @@
     </div>
 
     <script>
-        // Password logic & Music Timing Configuration
-        const startTime = 10;  // ⏱️ 10 sec par start hoga
-        const endTime = 110;   // ⏱️ 110 sec (1 min 50 sec) par repeat hoga
+        const startTime = 10;
+        const endTime = 110;
 
         function checkPassword() {
-    let input = document.getElementById("passInput").value.toLowerCase().trim();
-    if(input === "vibha") {
-        document.getElementById("login-screen").style.display = "none";
-        document.getElementById("main-screen").style.display = "block";
-        
-        let audio = document.getElementById("bgMusic");
-        
-        audio.load();
-        audio.play().then(() => {
-            audio.currentTime = startTime;
-        }).catch(err => console.log("Play error:", err));
+            let input = document.getElementById("passInput").value.toLowerCase().trim();
+            if(input === "vibha") {
+                document.getElementById("login-screen").style.display = "none";
+                document.getElementById("main-screen").style.display = "block";
+                
+                let audio = document.getElementById("bgMusic");
 
-        audio.addEventListener('timeupdate', function() {
-            if (this.currentTime >= endTime) {
-                this.currentTime = startTime;
-                this.play();
+                // Audio Tabhi Jump Karega Jab Wo Properly Load Aur Play Hoga
+                let playPromise = audio.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        audio.currentTime = startTime;
+                    }).catch(error => {
+                        console.log("Autoplay issue:", error);
+                    });
+                }
+
+                // Loop mechanism
+                audio.addEventListener('timeupdate', function() {
+                    if (this.currentTime >= endTime) {
+                        this.currentTime = startTime;
+                        this.play();
+                    }
+                });
+
+            } else {
+                document.getElementById("error-msg").style.display = "block";
             }
-        });
+        }
 
-    } else {
-        document.getElementById("error-msg").style.display = "block";
-    }
-}
-        // Section messages
         const data = {
             shayri1: "Tumhari ek muskaan hi kaafi hai mere din ko haseen banane ke liye... Vibha, tum meri zindagi ka sabse khoobsurat hissa ho! ❤️",
             msg1: "Jab se tum meri life me aayi ho, har ek lamha special ban gaya hai. Vibha, tum sirf meri pasand nahi, meri zarurat ho! 💌",
@@ -338,7 +338,7 @@
         }
 
         function acceptProposal() {
-            alert("Yayee! ❤️ I Love You So Much Vibha! 🎉🌹");
+            alert("Yayee! ❤️ I Love You So Much babee! 🎉🌹");
             document.getElementById("proposalModal").style.display = "none";
         }
     </script>
